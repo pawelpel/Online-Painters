@@ -1,0 +1,74 @@
+body {
+    background-color: white;
+    font-family: sans-serif;
+}
+
+h1 {
+    color: rgba(0, 0, 0, 0.1);
+    padding: 5px;
+    display: block;
+    margin: 0 auto;
+    width: 50%;
+    align-content: center;
+}
+
+article {
+    
+    margin: 0 auto;
+    width: 50%;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+#colors {
+    width: 100%;
+
+}
+
+.color {
+    background-color: rgba(0, 0, 0, 0.1);
+    height: 40px;
+    float: left;
+}
+
+.current {
+    height: 50px;
+}
+
+#range-input {
+    clear: both;
+}
+
+input[type=range] {
+    --moz-box-sizing: border-box;
+    box-sizing: border-box;
+    
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 90%;
+    height: 20px;
+}
+
+
+#range-value {
+    --moz-box-sizing: border-box;
+    box-sizing: border-box;
+    
+    font-size: 13px;
+    
+    margin: 12px 5px 0px 2px;
+    display: block;
+    float: right;
+}
+
+.radious {
+    border-radius: 6px; 
+    -moz-border-radius: 6px; 
+    -webkit-border-radius: 6px; 
+}
+
+canvas-box {
+    --moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+}

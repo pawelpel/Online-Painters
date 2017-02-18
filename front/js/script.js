@@ -156,17 +156,8 @@ document.addEventListener('DOMContentLoaded', function(){
         this.ws.onmessage = function(e){
             var answer = JSON.parse(e.data);
             if (Array.isArray(answer)){
-<<<<<<< Updated upstream:front/test_front/js/script.js
-                for (var i = 0; i < answer.length; i++) {
-                    var node = document.createElement("LI");                                                      // Create a <li> node
-                    var textnode = document.createTextNode(answer[i]['username'] + ' ' + answer[i]['message']);         // Create a text node
-                    node.appendChild(textnode);
-                    this.lista.appendChild(node);
-                }
-=======
                 console.log('Jest lista');
                 console.log(answer.toString())
->>>>>>> Stashed changes:front/js/script.js
             } else {
                 console.log('Jest element');
                 console.log(answer);
