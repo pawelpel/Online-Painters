@@ -163,7 +163,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         """
             Method executes observable notify_all method when new message came from client.
         """
-        self.log_event('Received: {}'.format(message))
+        self.log_event('Received message')
         self.observable.notify_all(message)
 
     def on_close(self):
