@@ -35,25 +35,38 @@ document.addEventListener('DOMContentLoaded', function(){
             console.log('Connection opened');
             this.sendData({
                 type: 'status',
-                value: 'joined',
+                message: 'joined',
                 username: this.username
             })
         }.bind(this);
 
         this.ws.onmessage = function(e){
             var answer = JSON.parse(e.data);
-            var node = document.createElement("LI");                                                      // Create a <li> node
-            var textnode = document.createTextNode(answer['username'] + ' ' + answer['message']);         // Create a text node
-            node.appendChild(textnode);
-            this.lista.appendChild(node);
+            if (Array.isArray(answer)){
+                console.log('Jest lista');
+                for (var i = 0; i < answer.length; i++) {
+                    var ans = JSON.parse(answer[i]);
+                    console.log(answer[i]);
+                    console.log(ans['username']);
+                    var node = document.createElement("LI");                                                      // Create a <li> node
+                    var textnode = document.createTextNode(ans['username'] + ' ' + ans['message']);         // Create a text node
+                    node.appendChild(textnode);
+                    this.lista.appendChild(node);
+                }
+            } else {
+                var node = document.createElement("LI");                                                      // Create a <li> node
+                var textnode = document.createTextNode(answer['username'] + ' ' + answer['message']);         // Create a text node
+                node.appendChild(textnode);
+                this.lista.appendChild(node);
+            }
         }.bind(this);
 
         this.ws.onclose = function(){
             console.log('Connection closed');
             this.sendData({
                 type: 'status',
-                value: 'left',
-                name: this.username
+                message: 'left',
+                username: this.username
             })
         }.bind(this);
 
