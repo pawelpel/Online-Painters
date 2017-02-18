@@ -1,15 +1,25 @@
 import os
+import sys
 import datetime
 import random
 
-import simplejson
 import tornado.httpserver
 import tornado.websocket
 import tornado.ioloop
 import tornado.web
 
+from database_package import RepositoryDB
 
-class Observable:
+
+class ListExtender(list):
+    """
+        Class extends list class with read_all method
+    """
+    def read_all(self):
+        return self
+
+
+class Observable(object):
     """
         Observable class to handle sending data to connected clients.
 
@@ -22,9 +32,12 @@ class Observable:
         self.observers = []
 
         if database:
+            self.database_initialized = True
             self.database = database
+            self.database.clear()
         else:
-            self.database = []
+            self.database_initialized = False
+            self.database = ListExtender()
 
     def in_observers(self, observer):
         """
@@ -39,10 +52,11 @@ class Observable:
         """
         self.observers.append(observer)
 
-        message = self.database   # Pobrac dane z bazy
+        message = self.database.read_all()
+
         if message:
             print('Notifing new client!')
-            self.notify(observer, simplejson.dumps(message))
+            self.notify(observer, message)
 
         self.show_status()
 
@@ -54,7 +68,7 @@ class Observable:
             self.observers.remove(observer)
             del observer
             self.show_status()
-        except ValueError as e:
+        except ValueError:
             pass
 
     def get_observer_no(self):
@@ -100,7 +114,6 @@ class Observer:
         """
             Method sends given message to client.
         """
-        # Send data to clinet
         self.user.write_message(message)
 
 
@@ -179,7 +192,12 @@ def run_server(port=None):
     # Path to front-end files
     front_path = os.path.dirname(os.getcwd()) + '/py-js-Studia_online_painters/front/'
 
-    observable = Observable()
+    if len(sys.argv) > 1 and sys.argv[1] == 'no_db':
+        database = None
+    else:
+        database = RepositoryDB('painter_db', 'collection_db')
+
+    observable = Observable(database=database)
 
     application = tornado.web.Application([
         (r'/ws', WSHandler, dict(observable=observable)),

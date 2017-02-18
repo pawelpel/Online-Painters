@@ -43,13 +43,10 @@ document.addEventListener('DOMContentLoaded', function(){
         this.ws.onmessage = function(e){
             var answer = JSON.parse(e.data);
             if (Array.isArray(answer)){
-                console.log('Jest lista');
+                console.log(answer);
                 for (var i = 0; i < answer.length; i++) {
-                    var ans = JSON.parse(answer[i]);
-                    console.log(answer[i]);
-                    console.log(ans['username']);
                     var node = document.createElement("LI");                                                      // Create a <li> node
-                    var textnode = document.createTextNode(ans['username'] + ' ' + ans['message']);         // Create a text node
+                    var textnode = document.createTextNode(answer[i]['username'] + ' ' + answer[i]['message']);         // Create a text node
                     node.appendChild(textnode);
                     this.lista.appendChild(node);
                 }
