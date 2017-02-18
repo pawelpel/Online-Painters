@@ -192,7 +192,8 @@ def run_server(port=None):
     """
 
     # Path to front-end files
-    front_path = os.path.dirname(os.getcwd()) + '/py-js-Studia_online_painters/front/'
+    path = os.path.dirname(os.getcwd()) + '/py-js-Studia_online_painters/'
+    front_path = path + 'front/'
 
     if any(argv == 'no_db' for argv in sys.argv):
         print('Using LIST')
