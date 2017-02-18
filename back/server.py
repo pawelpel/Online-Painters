@@ -2,6 +2,7 @@ import os
 import sys
 import datetime
 import random
+import simplejson
 
 import tornado.httpserver
 import tornado.websocket
@@ -16,7 +17,8 @@ class ListExtender(list):
         Class extends list class with read_all method
     """
     def read_all(self):
-        return self
+        ret = simplejson.dumps([simplejson.loads(x) for x in self])
+        return ret
 
 
 class Observable(object):
@@ -192,10 +194,16 @@ def run_server(port=None):
     # Path to front-end files
     front_path = os.path.dirname(os.getcwd()) + '/py-js-Studia_online_painters/front/'
 
-    if len(sys.argv) > 1 and sys.argv[1] == 'no_db':
+    if any(argv == 'no_db' for argv in sys.argv):
+        print('Using LIST')
         database = None
     else:
+        print('Using DATABASE')
         database = RepositoryDB('painter_db', 'collection_db')
+
+    if any(argv == 'test' for argv in sys.argv):
+        print('Using TEST_FRONT')
+        front_path += 'test_front/'
 
     observable = Observable(database=database)
 
