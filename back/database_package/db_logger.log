@@ -1,0 +1,25 @@
+2017-02-19 09:32:48
+User: n3hrox read the whole json collection
+
+2017-02-19 09:32:48
+Added to json collection:
+{'_id': ObjectId('58a95830a97e440a5ee86dcc'), 'key': 'testowy json dodany'}
+by user: n3hrox
+
+2017-02-19 09:32:48
+Added to json collection:
+{'_id': ObjectId('58a95830a97e440a5ee86dcd'), 'key': 'testowy json2 dodany'}
+by user: n3hrox
+
+2017-02-19 09:32:48
+User: n3hrox read the whole json collection
+
+2017-02-19 09:32:48
+Added to json collection:
+{'_id': ObjectId('58a95830a97e440a5ee86dce'), 'key': 'testowy json3 dodany'}
+by user: n3hrox
+
+2017-02-19 09:32:48
+User: n3hrox cleared the whole json collection 
+Last known collection:[{'key': 'testowy json dodany', '_id': ObjectId('58a95830a97e440a5ee86dcc')}, {'key': 'testowy json2 dodany', '_id': ObjectId('58a95830a97e440a5ee86dcd')}, {'key': 'testowy json3 dodany', '_id': ObjectId('58a95830a97e440a5ee86dce')}]
+
