@@ -2,8 +2,7 @@
 Projekt na Wzorce Projektowe
 
 Aby włączyć:
-
-
+___
 
 install python3+
 
