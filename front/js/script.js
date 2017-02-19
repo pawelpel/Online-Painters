@@ -22,6 +22,10 @@ document.addEventListener('DOMContentLoaded', function(){
         this.setUpRange();
 
         this.lines = [];
+        this.line = {
+            path_id: 0,
+            path: []
+        };
 
         this.joined = false;
         this.id = 'img_'+Math.round(Math.random()*1000000) + '';
@@ -77,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
             var empty = [];
             this.line = {
-                path_id: round(Math.random()*1000000) + '',
+                path_id: Math.round(Math.random()*1000000) + '',
                 path: empty
             };
 
