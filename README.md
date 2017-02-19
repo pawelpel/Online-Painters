@@ -1,8 +1,8 @@
 # py-js-Studia_online_painters
 Projekt na Wzorce Projektowe
 
-Aby włączyć:
 ___
+## Aby włączyć:
 
 install python3+
 
