@@ -30,8 +30,9 @@ class Observable(object):
         it will be sent to all connected clients.
     """
 
-    def __init__(self, database=None):
+    def __init__(self, database=None, verbose=False):
         self.observers = []
+        self.verbose = verbose
 
         if database:
             self.database_initialized = True
@@ -84,7 +85,10 @@ class Observable(object):
             Method prints observable class status.
         """
         print('Observable: I have {} observers'.format(self.get_observer_no()))
-        # print('\tMessages:\n['+'\n '.join(self.database).strip()+']')
+
+    def show_message(self, message):
+        if self.verbose:
+            print("MESSAGE: ", message)
 
     @staticmethod
     def notify(observer, message):
@@ -99,6 +103,7 @@ class Observable(object):
             from observers list with passing given message.
         """
         self.database.append(message)
+        self.show_message(message)
 
         for observer in self.observers:
             self.notify(observer, message)
@@ -195,6 +200,12 @@ def run_server(port=None):
     path = os.path.dirname(os.getcwd()) + '/py-js-Studia_online_painters/'
     front_path = path + 'front/'
 
+    if any(argv == 'verbose' for argv in sys.argv):
+        print('Using VERBOSE mode')
+        verbose = True
+    else:
+        verbose = False
+
     if any(argv == 'no_db' for argv in sys.argv):
         print('Using LIST')
         database = None
@@ -206,7 +217,7 @@ def run_server(port=None):
         print('Using TEST_FRONT')
         front_path += 'test_front/'
 
-    observable = Observable(database=database)
+    observable = Observable(database=database, verbose=verbose)
 
     application = tornado.web.Application([
         (r'/ws', WSHandler, dict(observable=observable)),
