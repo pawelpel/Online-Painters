@@ -88,7 +88,7 @@ class Observable(object):
 
     def show_message(self, message):
         if self.verbose:
-            print("MESSAGE: ", message)
+            print("MESSAGE SENDED TO CLIENTS: ", message)
 
     @staticmethod
     def notify(observer, message):
