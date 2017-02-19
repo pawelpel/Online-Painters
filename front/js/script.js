@@ -1,4 +1,5 @@
 var sketchpad;
+var response;
 
 document.addEventListener('DOMContentLoaded', function(){
 
@@ -97,7 +98,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
         this.canvas.onmousemove = function(e){
             if(!this.mouseDown) return;
-            console.log(this.getX(e), this.getY(e));
             this.ctx.lineWidth = this.currentValue;
             this.ctx.strokeStyle = this.currentColor;
             this.ctx.lineTo(this.getX(e), this.getY(e));
@@ -164,8 +164,21 @@ document.addEventListener('DOMContentLoaded', function(){
 
         this.ws.onmessage = function(e){
             var answer = JSON.parse(e.data);
-            if (Array.isArray(answer)){
+            if (Array.isArray(answer) && answer.length > 0){
                 console.log('Jest lista');
+                console.log(answer);
+                for (var i = 0; i < answer.length; i++){
+                    if (answer[i].hasOwnProperty('path_id')) {
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(answer[i].path[0].x, answer[i].path[0].y);
+                        this.ctx.lineWidth = answer[i].path[0].lineWidth;
+                        this.ctx.strokeStyle = answer[i].path[0].color;
+                        for (var j = 1; j < answer[i].path.length; j++){
+                            this.ctx.lineTo(answer[i].path[j].x, answer[i].path[j].y);
+                            this.ctx.stroke();
+                        }
+                    }
+                }
                 //console.log(answer.toString())
                 /*if (Array.isArray(answer[0])){
                     for (var i = 0; i < answer.length; i++){
@@ -196,6 +209,17 @@ document.addEventListener('DOMContentLoaded', function(){
             } else {
                 console.log('Jest element');
                 console.log(answer);
+                response = answer;
+                if (answer.hasOwnProperty('path_id')) {
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(answer.path[0].x, answer.path[0].y);
+                    this.ctx.lineWidth = answer.path[0].lineWidth;
+                    this.ctx.strokeStyle = answer.path[0].color;
+                    for (var j = 1; j < answer.path.length; j++){
+                        this.ctx.lineTo(answer.path[j].x, answer.path[j].y);
+                        this.ctx.stroke();
+                    }
+                }
             }
         }.bind(this);
 
