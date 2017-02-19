@@ -179,33 +179,6 @@ document.addEventListener('DOMContentLoaded', function(){
                         }
                     }
                 }
-                //console.log(answer.toString())
-                /*if (Array.isArray(answer[0])){
-                    for (var i = 0; i < answer.length; i++){
-
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(answer[i][0].x, answer[i][0].y);
-                        this.ctx.lineWidth = answer[i][0].lineWidth;
-                        this.ctx.strokeStyle = answer[i][0].color;
-
-                        for (var j = 1; j < answer.length; j++){
-                            this.ctx.lineTo(answer[i][j].x, answer[i][j].y);
-                            this.ctx.stroke();
-                        }
-                    }
-                }
-                else
-                {
-                    this.ctx.beginPath();
-                    this.ctx.moveTo(answer[0].x, answer[0].y);
-                    this.ctx.lineWidth = answer[0].lineWidth;
-                    this.ctx.strokeStyle = answer[0].color;
-
-                    for (var j = 1; j < answer.length; j++){
-                        this.ctx.lineTo(answer[j].x, answer[j].y);
-                        this.ctx.stroke();
-                    }
-                }*/
             } else {
                 console.log('Jest element');
                 console.log(answer);
@@ -233,8 +206,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
             this.ws.send(JSON.stringify(data));
         }.bind(this);
-
-        //this.ws.onopen();
+        
         this.joined = true;
     };
 
