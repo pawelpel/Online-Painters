@@ -3,6 +3,8 @@ Projekt na Wzorce Projektowe
 
 Aby włączyć:
 
+
+
 install python3+
 
 `pip install tornado`
@@ -20,3 +22,5 @@ from back/ and front/ folders level
 use `no_db` arg for not using database
 
 use `test` arg for using test_front/ files
+
+use `verbose` arg for using verbose mode
