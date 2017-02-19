@@ -188,7 +188,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
 
 def run_server(port=None):
     """
-        Main function with run server on localhost and given port.
+        Main function which run server on localhost and given port.
     """
 
     # Path to front-end files
