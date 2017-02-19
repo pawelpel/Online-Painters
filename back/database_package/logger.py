@@ -22,6 +22,10 @@ class LoggerSingleton:
         """
         self.logger = "db_logger.log"
 
+        with open(self._instance.logger, "w"):
+            # Overwrite file
+            pass
+
     def log_saving(self, json):
         with open(self._instance.logger, "a") as f:
             f.write(
