@@ -72,11 +72,15 @@ document.addEventListener('DOMContentLoaded', function(){
         this.canvas.onmousedown = function(e){
             this.mouseDown = true;
             this.canvas.style.cursor = 'crosshair';
-            //this.ctx.beginPath();
-            //this.ctx.moveTo(this.getX(e), this.getY(e));
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.getX(e), this.getY(e));
 
+            var empty = [];
+            this.line = {
+                path_id: round(Math.random()*1000000) + '',
+                path: empty
+            };
 
-            this.line = [];
         }.bind(this);
 
         this.canvas.onmouseup = function(){
@@ -89,11 +93,11 @@ document.addEventListener('DOMContentLoaded', function(){
 
         this.canvas.onmousemove = function(e){
             if(!this.mouseDown) return;
-            //console.log(this.getX(e), this.getY(e));
-            //this.ctx.lineWidth = this.currentValue;
-            //this.ctx.strokeStyle = this.currentColor;
-            //this.ctx.lineTo(this.getX(e), this.getY(e));
-            //this.ctx.stroke();
+            console.log(this.getX(e), this.getY(e));
+            this.ctx.lineWidth = this.currentValue;
+            this.ctx.strokeStyle = this.currentColor;
+            this.ctx.lineTo(this.getX(e), this.getY(e));
+            this.ctx.stroke();
 
 
             var tmp = {
@@ -102,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 x: this.getX(e),
                 y: this.getY(e),
             };
-            this.line.push(tmp);
+            this.line.path.push(tmp);
 
         }.bind(this);
     }
@@ -159,7 +163,7 @@ document.addEventListener('DOMContentLoaded', function(){
             if (Array.isArray(answer)){
                 console.log('Jest lista');
                 //console.log(answer.toString())
-                if (Array.isArray(answer[0])){
+                /*if (Array.isArray(answer[0])){
                     for (var i = 0; i < answer.length; i++){
 
                         this.ctx.beginPath();
@@ -184,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function(){
                         this.ctx.lineTo(answer[j].x, answer[j].y);
                         this.ctx.stroke();
                     }
-                }
+                }*/
             } else {
                 console.log('Jest element');
                 console.log(answer);
