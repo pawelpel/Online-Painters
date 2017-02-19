@@ -59,6 +59,7 @@ class Observable(object):
 
         if message:
             print('Notifing new client!')
+            self.show_message(message, True)
             self.notify(observer, message)
 
         self.show_status()
@@ -86,9 +87,14 @@ class Observable(object):
         """
         print('Observable: I have {} observers'.format(self.get_observer_no()))
 
-    def show_message(self, message):
+    def show_message(self, message, new_client=False):
         if self.verbose:
-            print("MESSAGE SENDED TO CLIENTS: ", message)
+            t_1 = ''
+            t_2 = 'S'
+            if new_client:
+                t_1 = 'NEW '
+                t_2 = ''
+            print("MESSAGE SENT TO {}CLIENT{}: ".format(t_1, t_2), message)
 
     @staticmethod
     def notify(observer, message):
