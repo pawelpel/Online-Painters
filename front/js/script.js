@@ -71,8 +71,8 @@ document.addEventListener('DOMContentLoaded', function(){
         this.canvas.onmousedown = function(e){
             this.mouseDown = true;
             this.canvas.style.cursor = 'crosshair';
-            this.ctx.beginPath();
-            this.ctx.moveTo(this.getX(e), this.getY(e));
+            //this.ctx.beginPath();
+            //this.ctx.moveTo(this.getX(e), this.getY(e));
 
 
             this.line = [];
@@ -89,10 +89,10 @@ document.addEventListener('DOMContentLoaded', function(){
         this.canvas.onmousemove = function(e){
             if(!this.mouseDown) return;
             //console.log(this.getX(e), this.getY(e));
-            this.ctx.lineWidth = this.currentValue;
-            this.ctx.strokeStyle = this.currentColor;
-            this.ctx.lineTo(this.getX(e), this.getY(e));
-            this.ctx.stroke();
+            //this.ctx.lineWidth = this.currentValue;
+            //this.ctx.strokeStyle = this.currentColor;
+            //this.ctx.lineTo(this.getX(e), this.getY(e));
+            //this.ctx.stroke();
 
 
             var tmp = {
@@ -157,7 +157,20 @@ document.addEventListener('DOMContentLoaded', function(){
             var answer = JSON.parse(e.data);
             if (Array.isArray(answer)){
                 console.log('Jest lista');
-                console.log(answer.toString())
+                //console.log(answer.toString())
+
+
+                this.ctx.beginPath();
+                this.ctx.moveTo(answer[0].x, answer[0].y);
+                this.ctx.lineWidth = answer[0].lineWidth;
+                this.ctx.strokeStyle = answer[0].color;
+
+                for (var i = 1; i < answer.length; i++){
+                    this.ctx.lineTo(answer[i].x, answer[i].y);
+                    this.ctx.stroke();
+                }
+                
+
             } else {
                 console.log('Jest element');
                 console.log(answer);
