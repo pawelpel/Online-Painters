@@ -9,7 +9,7 @@ import tornado.websocket
 import tornado.ioloop
 import tornado.web
 
-from database_package import RepositoryDB
+from database_package.repository_db import RepositoryDB
 
 
 class ListExtender(list):

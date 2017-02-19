@@ -1,6 +1,7 @@
 import simplejson
 from pymongo import MongoClient
-from back.database_package.logger import LoggerSingleton
+
+from .logger import LoggerSingleton
 
 
 class RepositoryDB:
