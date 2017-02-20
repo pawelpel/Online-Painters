@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', function(){
         }
 
         this.colorsArray = changeToArray(document.querySelectorAll('.color'));
+        var active = document.querySelector('#colors div:nth-child(2)');
+        active.classList.add("current");
+
         this.mouseDown = false;
         this.currentColor = '#000';
         this.currentValue = 10.0;
