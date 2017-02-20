@@ -196,6 +196,11 @@ document.addEventListener('DOMContentLoaded', function(){
                 username: this.username
             };
             ws.send(JSON.stringify(data));
+            var local_copy = JSON.parse(localStorage.localdb);
+            for (var i = 0; i < local_copy.length; i++)
+            {
+                ws.send(JSON.stringify(local_copy[i]));
+            }
         }.bind(this);
 
         ws.onmessage = function(e){
