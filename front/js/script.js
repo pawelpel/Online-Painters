@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function(){
         this.setUpColors();
         this.setUpRange();
 
-        this.lines = [];
+        var local;
         this.line = {
             path_id: 0,
             path: []
@@ -77,6 +77,28 @@ document.addEventListener('DOMContentLoaded', function(){
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
 
+        if (localStorage.getItem("localdb") === null) {
+            localStorage.setItem("localdb", JSON.stringify([]));
+        }
+
+        
+        local = JSON.parse(localStorage.localdb);
+        if (Array.isArray(local) && local.length > 0) {
+            for (var i = 0; i < local.length; i++){
+                    if (local[i].hasOwnProperty('path_id')) {
+                        ctx.beginPath();
+                        ctx.moveTo(local[i].path[0].x, local[i].path[0].y);
+                        ctx.lineWidth = local[i].path[0].lineWidth;
+                        ctx.strokeStyle = local[i].path[0].color;
+                        for (var j = 1; j < local[i].path.length; j++){
+                            ctx.lineTo(local[i].path[j].x, local[i].path[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+        }
+        
+
         this.canvas.onmousedown = function(e){
             this.mouseDown = true;
             this.canvas.style.cursor = 'crosshair';
@@ -95,7 +117,8 @@ document.addEventListener('DOMContentLoaded', function(){
             this.mouseDown = false;
 
             
-            this.lines.push(this.line);
+            local.push(this.line);
+            localStorage.setItem("localdb", JSON.stringify(local));
             ws.send(JSON.stringify(this.line));
         }.bind(this);
 
