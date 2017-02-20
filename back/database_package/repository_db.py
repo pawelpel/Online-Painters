@@ -46,7 +46,7 @@ class RepositoryDB:
 
     def remove_old(self, delay):
         """
-            Removes data which się older than time delta.
+            Removes data which are older than time delta.
         """
         self.logger.log_deleting_old(delay)
         self.json_collection.delete_many({'_time': {"$lt": int(time.time()) - int(delay)}})
