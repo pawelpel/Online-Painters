@@ -81,7 +81,6 @@ document.addEventListener('DOMContentLoaded', function(){
             localStorage.setItem("localdb", JSON.stringify([]));
         }
 
-        
         local = JSON.parse(localStorage.localdb);
         if (Array.isArray(local) && local.length > 0) {
             for (var i = 0; i < local.length; i++){
@@ -203,9 +202,24 @@ document.addEventListener('DOMContentLoaded', function(){
             var answer = JSON.parse(e.data);
             if (Array.isArray(answer) && answer.length > 0){
                 console.log('Jest lista');
-                console.log(answer);
+                var local_copy = local;
+                var answer_copy = answer;
+
+                for (var i = 0; i < local_copy.length; i++) {
+                    for (var j = 0; j < answer_copy; j++) {
+                        if (local_copy[i].path_id == answer_copy[j].path_id) {
+                            delete(local_copy[i]);
+                            delete(answer_copy[j]);
+                        }
+                    }
+                }
+
+                answer = answer_copy;
+
                 for (var i = 0; i < answer.length; i++){
                     if (answer[i].hasOwnProperty('path_id')) {
+                        local.push(answer[i]);
+                        localStorage.setItem("localdb", JSON.stringify(local));
                         ctx.beginPath();
                         ctx.moveTo(answer[i].path[0].x, answer[i].path[0].y);
                         ctx.lineWidth = answer[i].path[0].lineWidth;
@@ -216,11 +230,20 @@ document.addEventListener('DOMContentLoaded', function(){
                         }
                     }
                 }
+
+                for (var i = 0; i < local_copy.length; i++)
+                {
+                    ws.send(JSON.stringify(local_copy[i]));
+                }
+
+
             } else {
                 console.log('Jest element');
                 console.log(answer);
                 response = answer;
                 if (answer.hasOwnProperty('path_id')) {
+                    //local.push(answer);
+                    //localStorage.setItem("localdb", JSON.stringify(local));
                     ctx.beginPath();
                     ctx.moveTo(answer.path[0].x, answer.path[0].y);
                     ctx.lineWidth = answer.path[0].lineWidth;
