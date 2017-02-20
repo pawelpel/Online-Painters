@@ -14,7 +14,7 @@ from database_package.repository_db import RepositoryDB
 
 class ListExtender(list):
     """
-        Class extends list class with read_all method
+        Class extends list class with necessary methods.
     """
     def read_all(self):
         ret = simplejson.dumps([simplejson.loads(x) for x in self])
