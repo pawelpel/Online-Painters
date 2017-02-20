@@ -2,7 +2,7 @@
 Projekt na Wzorce Projektowe
 
 ___
-## Aby włączyć:
+## To run it:
 
 install python3+
 
@@ -23,3 +23,5 @@ use `no_db` arg for not using database
 use `test` arg for using test_front/ files
 
 use `verbose` arg for using verbose mode
+
+use `remove_delay` arg for using removing mode (deleting data which are older then X seconds

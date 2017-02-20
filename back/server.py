@@ -20,6 +20,9 @@ class ListExtender(list):
         ret = simplejson.dumps([simplejson.loads(x) for x in self])
         return ret
 
+    def remove_old(self, delay):
+        pass
+
 
 class Observable(object):
     """
@@ -30,9 +33,10 @@ class Observable(object):
         it will be sent to all connected clients.
     """
 
-    def __init__(self, database=None, verbose=False):
+    def __init__(self, database=None, verbose=False, remove_time_delay=None):
         self.observers = []
         self.verbose = verbose
+        self.remove_time_delay = remove_time_delay
 
         if database:
             self.database_initialized = True
@@ -108,6 +112,8 @@ class Observable(object):
             Method add new message to database and then executes observable notify method for all observers
             from observers list with passing given message.
         """
+        if self.remove_time_delay:
+            self.database.remove_old(self.remove_time_delay)
         self.database.append(message)
         self.show_message(message)
 
@@ -212,6 +218,12 @@ def run_server(port=None):
     else:
         verbose = False
 
+    if any(argv == 'remove_delay' for argv in sys.argv):
+        print('Using VERBOSE mode')
+        remove_time_delay = 10
+    else:
+        remove_time_delay = None
+
     if any(argv == 'no_db' for argv in sys.argv):
         print('Using LIST')
         database = None
@@ -223,7 +235,7 @@ def run_server(port=None):
         print('Using TEST_FRONT')
         front_path += 'test_front/'
 
-    observable = Observable(database=database, verbose=verbose)
+    observable = Observable(database=database, verbose=verbose, remove_time_delay=remove_time_delay)
 
     application = tornado.web.Application([
         (r'/ws', WSHandler, dict(observable=observable)),

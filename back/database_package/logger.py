@@ -48,6 +48,13 @@ class LoggerSingleton:
                 str(json_collection)[:100] + '...' + "\n\n"
             )
 
+    def log_deleting_old(self, delta):
+        with open(self._instance.logger, "a") as f:
+            f.write(
+                get_time() + "\nUser: " + getpass.getuser() +
+                " delete old files using " + str(delta) + "s delta \n\n"
+            )
+
 
 def get_time():
     """
