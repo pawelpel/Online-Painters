@@ -12,7 +12,7 @@ class LoggerSingleton:
             limit all of them to one instance.
         """
         if not isinstance(cls._instance, cls):
-            cls._instance = object.__new__(cls, *args, **kwargs)
+            cls._instance = object.__new__(cls, *args)
         return cls._instance
 
     def __init__(self):

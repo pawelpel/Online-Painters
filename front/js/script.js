@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     Sketchpad.prototype.init = function(){
 
-        
+
         ws = new WebSocket("ws://localhost:8000/ws");
 
         ws.onopen = function() {
