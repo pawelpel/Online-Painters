@@ -248,6 +248,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 for (var i = 0; i < answer.length; i++){
                     if (answer[i].hasOwnProperty('path_id')) {
                         
+                        local = JSON.parse(localStorage.localdb);
                         local.push(answer[i]);
                         localStorage.setItem("localdb", JSON.stringify(local));
                         
