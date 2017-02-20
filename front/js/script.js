@@ -33,13 +33,14 @@ document.addEventListener('DOMContentLoaded', function(){
         this.username = 'user_'+Math.round(Math.random()*1000000) + '';
 
         var ctx = false;
+        var canvas = false;
         var ws = false;
 
         this.handleConnection();
     }
 
     Sketchpad.prototype.getX = function(e){
-        var b = this.canvas.getBoundingClientRect();
+        var b = canvas.getBoundingClientRect();
         if(e.offsetX){
             return e.offsetX;
         } else if(e.clientX){
@@ -48,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function(){
     }
 
     Sketchpad.prototype.getY = function(e){
-        var b = this.canvas.getBoundingClientRect();
+        var b = canvas.getBoundingClientRect();
         if(e.offsetY){
             return e.offsetY;
         } else if(e.clientY){
@@ -58,22 +59,22 @@ document.addEventListener('DOMContentLoaded', function(){
 
     Sketchpad.prototype.winResize = function(){
         document.querySelector('body').onresize = function(e){
-            this.canvas.width = this.canvas.parentElement.offsetWidth;
-            this.canvas.height = 400;
-            ctx = this.canvas.getContext("2d");
+            canvas.width = canvas.parentElement.offsetWidth;
+            canvas.height = 400;
+            ctx = canvas.getContext("2d");
             ctx.fillStyle = "#fff";
-            ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
         }.bind(this);
     }
 
     Sketchpad.prototype.setUpCanvas = function(){
-        this.canvas = document.querySelector('canvas');
-        this.canvas.width = this.canvas.parentElement.offsetWidth;
-        this.canvas.height = 400;
+        canvas = document.querySelector('canvas');
+        canvas.width = canvas.parentElement.offsetWidth;
+        canvas.height = 400;
 
-        ctx = this.canvas.getContext("2d");
+        ctx = canvas.getContext("2d");
         ctx.fillStyle = "#fff";
-        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
 
@@ -98,9 +99,9 @@ document.addEventListener('DOMContentLoaded', function(){
         }
         
 
-        this.canvas.onmousedown = function(e){
+        canvas.onmousedown = function(e){
             this.mouseDown = true;
-            this.canvas.style.cursor = 'crosshair';
+            canvas.style.cursor = 'crosshair';
             ctx.beginPath();
             ctx.moveTo(this.getX(e), this.getY(e));
 
@@ -112,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
         }.bind(this);
 
-        this.canvas.onmouseup = function(){
+        canvas.onmouseup = function(){
             this.mouseDown = false;
 
             
@@ -121,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function(){
             ws.send(JSON.stringify(this.line));
         }.bind(this);
 
-        this.canvas.onmousemove = function(e){
+        canvas.onmousemove = function(e){
             if(!this.mouseDown) return;
             ctx.lineWidth = this.currentValue;
             ctx.strokeStyle = this.currentColor;
@@ -175,12 +176,30 @@ document.addEventListener('DOMContentLoaded', function(){
     Sketchpad.prototype.handleConnection = function(){
         this.connectButton = document.querySelector('#connect');
         this.disconnectButton = document.querySelector('#disconnect');
+        this.clearButton = document.querySelector('#clear');
         this.led = document.querySelector('#led');
 
-        this.connectButton.addEventListener('click', this.init, false);
+        this.disconnectButton.disabled = true;
+
+        this.clearButton.addEventListener('click', function(){
+            delete(localStorage.localdb);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#fff";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }, false);
+
+        this.connectButton.addEventListener('click', function(){
+            this.init();
+            this.connectButton.disabled = true;
+            this.disconnectButton.disabled = false;
+
+
+        }.bind(this), false);
         this.disconnectButton.addEventListener('click', function(){
             ws.close();
-        }, false);
+            this.connectButton.disabled = false;
+            this.disconnectButton.disabled = true;
+        }.bind(this), false);
     }
 
     Sketchpad.prototype.init = function(){
