@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function(){
             var answer = JSON.parse(e.data);
             if (Array.isArray(answer) && answer.length > 0){
                 console.log('Jest lista');
-                var local_copy = local;
+                var local_copy = JSON.parse(localStorage.localdb);
                 var answer_copy = answer;
 
                 for (var i = 0; i < local_copy.length; i++) {
@@ -215,11 +215,14 @@ document.addEventListener('DOMContentLoaded', function(){
                 }
 
                 answer = answer_copy;
+                var local = JSON.parse(localStorage.localdb);
 
                 for (var i = 0; i < answer.length; i++){
                     if (answer[i].hasOwnProperty('path_id')) {
+                        
                         local.push(answer[i]);
                         localStorage.setItem("localdb", JSON.stringify(local));
+                        
                         ctx.beginPath();
                         ctx.moveTo(answer[i].path[0].x, answer[i].path[0].y);
                         ctx.lineWidth = answer[i].path[0].lineWidth;
@@ -241,9 +244,11 @@ document.addEventListener('DOMContentLoaded', function(){
                 console.log('Jest element');
                 console.log(answer);
                 response = answer;
+                local = JSON.parse(localStorage.localdb);
                 if (answer.hasOwnProperty('path_id')) {
-                    //local.push(answer);
-                    //localStorage.setItem("localdb", JSON.stringify(local));
+                    local.push(answer);
+                    localStorage.setItem("localdb", JSON.stringify(local));
+
                     ctx.beginPath();
                     ctx.moveTo(answer.path[0].x, answer.path[0].y);
                     ctx.lineWidth = answer.path[0].lineWidth;
