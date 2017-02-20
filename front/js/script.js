@@ -186,6 +186,7 @@ document.addEventListener('DOMContentLoaded', function(){
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = "#fff";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
+            location.reload();
         }, false);
 
         this.connectButton.addEventListener('click', function(){
