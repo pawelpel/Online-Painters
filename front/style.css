@@ -67,6 +67,15 @@ input[type=range] {
     -webkit-border-radius: 6px; 
 }
 
+#connection {
+
+}
+
+#connection #led {
+    font-size: 2rem;
+    color: red;
+}
+
 canvas-box {
     --moz-box-sizing: border-box;
     box-sizing: border-box;

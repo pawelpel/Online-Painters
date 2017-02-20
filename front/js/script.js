@@ -32,7 +32,10 @@ document.addEventListener('DOMContentLoaded', function(){
         this.id = 'img_'+Math.round(Math.random()*1000000) + '';
         this.username = 'user_'+Math.round(Math.random()*1000000) + '';
 
-        this.init();
+        var ctx = false;
+        var ws = false;
+
+        this.handleConnection();
     }
 
     Sketchpad.prototype.getX = function(e){
@@ -57,9 +60,9 @@ document.addEventListener('DOMContentLoaded', function(){
         document.querySelector('body').onresize = function(e){
             this.canvas.width = this.canvas.parentElement.offsetWidth;
             this.canvas.height = 400;
-            this.ctx = this.canvas.getContext("2d");
-            this.ctx.fillStyle = "#fff";
-            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+            ctx = this.canvas.getContext("2d");
+            ctx.fillStyle = "#fff";
+            ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         }.bind(this);
     }
 
@@ -68,17 +71,17 @@ document.addEventListener('DOMContentLoaded', function(){
         this.canvas.width = this.canvas.parentElement.offsetWidth;
         this.canvas.height = 400;
 
-        this.ctx = this.canvas.getContext("2d");
-        this.ctx.fillStyle = "#fff";
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.lineJoin = 'round';
-        this.ctx.lineCap = 'round';
+        ctx = this.canvas.getContext("2d");
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
 
         this.canvas.onmousedown = function(e){
             this.mouseDown = true;
             this.canvas.style.cursor = 'crosshair';
-            this.ctx.beginPath();
-            this.ctx.moveTo(this.getX(e), this.getY(e));
+            ctx.beginPath();
+            ctx.moveTo(this.getX(e), this.getY(e));
 
             var empty = [];
             this.line = {
@@ -93,15 +96,15 @@ document.addEventListener('DOMContentLoaded', function(){
 
             
             this.lines.push(this.line);
-            this.ws.send(JSON.stringify(this.line));
+            ws.send(JSON.stringify(this.line));
         }.bind(this);
 
         this.canvas.onmousemove = function(e){
             if(!this.mouseDown) return;
-            this.ctx.lineWidth = this.currentValue;
-            this.ctx.strokeStyle = this.currentColor;
-            this.ctx.lineTo(this.getX(e), this.getY(e));
-            this.ctx.stroke();
+            ctx.lineWidth = this.currentValue;
+            ctx.strokeStyle = this.currentColor;
+            ctx.lineTo(this.getX(e), this.getY(e));
+            ctx.stroke();
 
 
             var tmp = {
@@ -147,35 +150,46 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     }
 
+    Sketchpad.prototype.handleConnection = function(){
+        this.connectButton = document.querySelector('#connect');
+        this.disconnectButton = document.querySelector('#disconnect');
+        this.led = document.querySelector('#led');
+
+        this.connectButton.addEventListener('click', this.init, false);
+        this.disconnectButton.addEventListener('click', function(){
+            ws.close();
+        }, false);
+    }
+
     Sketchpad.prototype.init = function(){
 
         
-        this.ws = new WebSocket("ws://localhost:8000/ws");
+        ws = new WebSocket("ws://localhost:8000/ws");
 
-        this.ws.onopen = function() {
+        ws.onopen = function() {
             console.log('Connection opened');
             var data = {
                 type: 'status',
                 message: 'joined',
                 username: this.username
             };
-            this.ws.send(JSON.stringify(data));
+            ws.send(JSON.stringify(data));
         }.bind(this);
 
-        this.ws.onmessage = function(e){
+        ws.onmessage = function(e){
             var answer = JSON.parse(e.data);
             if (Array.isArray(answer) && answer.length > 0){
                 console.log('Jest lista');
                 console.log(answer);
                 for (var i = 0; i < answer.length; i++){
                     if (answer[i].hasOwnProperty('path_id')) {
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(answer[i].path[0].x, answer[i].path[0].y);
-                        this.ctx.lineWidth = answer[i].path[0].lineWidth;
-                        this.ctx.strokeStyle = answer[i].path[0].color;
+                        ctx.beginPath();
+                        ctx.moveTo(answer[i].path[0].x, answer[i].path[0].y);
+                        ctx.lineWidth = answer[i].path[0].lineWidth;
+                        ctx.strokeStyle = answer[i].path[0].color;
                         for (var j = 1; j < answer[i].path.length; j++){
-                            this.ctx.lineTo(answer[i].path[j].x, answer[i].path[j].y);
-                            this.ctx.stroke();
+                            ctx.lineTo(answer[i].path[j].x, answer[i].path[j].y);
+                            ctx.stroke();
                         }
                     }
                 }
@@ -184,19 +198,19 @@ document.addEventListener('DOMContentLoaded', function(){
                 console.log(answer);
                 response = answer;
                 if (answer.hasOwnProperty('path_id')) {
-                    this.ctx.beginPath();
-                    this.ctx.moveTo(answer.path[0].x, answer.path[0].y);
-                    this.ctx.lineWidth = answer.path[0].lineWidth;
-                    this.ctx.strokeStyle = answer.path[0].color;
+                    ctx.beginPath();
+                    ctx.moveTo(answer.path[0].x, answer.path[0].y);
+                    ctx.lineWidth = answer.path[0].lineWidth;
+                    ctx.strokeStyle = answer.path[0].color;
                     for (var j = 1; j < answer.path.length; j++){
-                        this.ctx.lineTo(answer.path[j].x, answer.path[j].y);
-                        this.ctx.stroke();
+                        ctx.lineTo(answer.path[j].x, answer.path[j].y);
+                        ctx.stroke();
                     }
                 }
             }
         }.bind(this);
 
-        this.ws.onclose = function(){
+        ws.onclose = function(){
             console.log('Connection closed');
             var data = {
                 type: 'status',
@@ -204,7 +218,8 @@ document.addEventListener('DOMContentLoaded', function(){
                 username: this.username
             };
 
-            this.ws.send(JSON.stringify(data));
+            ws.send(JSON.stringify(data));
+            this.joined = false;
         }.bind(this);
         
         this.joined = true;
